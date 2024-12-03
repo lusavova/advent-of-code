@@ -17,7 +17,7 @@ func main() {
 	lines := strings.Split(string(data), "\n")
 	for _, line := range lines {
 		tokens := strings.Split(line, " ")
-		numbers := []int{}
+		var numbers []int
 		for _, token := range tokens {
 			num, _ := strconv.Atoi(token)
 			numbers = append(numbers, num)
