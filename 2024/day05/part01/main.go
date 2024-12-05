@@ -28,15 +28,14 @@ func main() {
 }
 
 func isValidLine(line []string, pagesOrder map[string][]string) bool {
-	isValidLine := true
-	for i, el := range line {
-		for j := i + 1; j < len(line); j++ {
-			if !contains(line[j], pagesOrder[el]) {
-				isValidLine = false
+	for i, current := range line {
+		for _, next := range line[i+1:] {
+			if !contains(next, pagesOrder[current]) {
+				return false
 			}
 		}
 	}
-	return isValidLine
+	return true
 }
 
 func contains(target string, elements []string) bool {
