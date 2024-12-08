@@ -44,14 +44,14 @@ func colorAndPrintMatrix(matrix [][]string) {
 	MoveCursor(0, 0)
 	for row := 0; row < len(matrix); row++ {
 		for col := 0; col < len(matrix[row]); col++ {
-			color := Colors["gray"]
+			color := Color.Gray
 			switch matrix[row][col] {
 			case ".":
-				color = Colors["gray"]
+				color = Color.Gray
 			case "#":
-				color = Colors["blue"]
+				color = Color.Blue
 			case "^", "v", "<", ">", "*":
-				color = Colors["green"]
+				color = Color.Green
 			}
 			fmt.Printf("%s%s%s ", color, matrix[row][col], Reset)
 		}

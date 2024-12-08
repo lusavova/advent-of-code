@@ -5,15 +5,26 @@ import (
 	"time"
 )
 
-var Colors = map[string]string{
-	"red":     "\033[31m",
-	"green":   "\033[32m",
-	"yellow":  "\033[33m",
-	"blue":    "\033[34m",
-	"magenta": "\033[35m",
-	"cyan":    "\033[36m",
-	"white":   "\033[37m",
-	"gray":    "\033[90m",
+type ColorStruct struct {
+	Red     string
+	Green   string
+	Yellow  string
+	Blue    string
+	Magenta string
+	Cyan    string
+	White   string
+	Gray    string
+}
+
+var Color = ColorStruct{
+	Red:     "\033[31m",
+	Green:   "\033[32m",
+	Yellow:  "\033[33m",
+	Blue:    "\033[34m",
+	Magenta: "\033[35m",
+	Cyan:    "\033[36m",
+	White:   "\033[37m",
+	Gray:    "\033[90m",
 }
 
 const Reset = "\033[0m"
@@ -27,5 +38,5 @@ func MoveCursor(x, y int) {
 }
 
 func Sleep() {
-	time.Sleep(50 * time.Millisecond)
+	time.Sleep(100 * time.Millisecond)
 }
