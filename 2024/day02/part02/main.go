@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"strconv"
@@ -8,50 +9,70 @@ import (
 )
 
 func main() {
-	data, err := os.ReadFile("./input.txt")
+	file, err := os.Open("input.txt")
 	if err != nil {
-		fmt.Printf("Error: %v\n", err)
 		return
 	}
+	defer file.Close()
+
 	result := 0
-	lines := strings.Split(string(data), "\n")
-	for _, line := range lines {
-		tokens := strings.Split(line, " ")
-		numbers := []int{}
-		for _, token := range tokens {
-			num, _ := strconv.Atoi(token)
-			numbers = append(numbers, num)
-		}
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		numbers := convertLineToNumbers(line)
 
 		if isSafeRow(numbers) {
 			result++
-		} else {
-			for i, _ := range numbers {
-				newNums := append([]int(nil), numbers[:i]...)
-				newNums = append(newNums, numbers[i+1:]...)
-				if isSafeRow(newNums) {
-					result++
-					break
-				}
-			}
+			continue
+		}
+
+		if isSafeRowAfterModification(numbers) {
+			result++
 		}
 	}
 
 	fmt.Println(result)
 }
 
+func isSafeRowAfterModification(numbers []int) bool {
+	isSafe := false
+	for i, _ := range numbers {
+		newNums := append([]int(nil), numbers[:i]...)
+		newNums = append(newNums, numbers[i+1:]...)
+
+		if isSafeRow(newNums) {
+			isSafe = true
+			break
+		}
+	}
+	return isSafe
+}
+
+func convertLineToNumbers(line string) []int {
+	tokens := strings.Fields(line)
+
+	var numbers []int
+	for _, token := range tokens {
+		num, _ := strconv.Atoi(token)
+		numbers = append(numbers, num)
+	}
+	return numbers
+}
+
 func isSafeRow(numbers []int) bool {
 	isIncreasing := numbers[1]-numbers[0] > 0
 	for i := 1; i < len(numbers); i++ {
-		prev := numbers[i-1]
-		current := numbers[i]
+		prev, current := numbers[i-1], numbers[i]
+
 		if prev == current {
 			return false
 		}
+
 		isCurrentIncreasing := current-prev > 0
 		if isCurrentIncreasing != isIncreasing {
 			return false
 		}
+
 		if absDiff(current, prev) > 3 {
 			return false
 		}
@@ -61,10 +82,8 @@ func isSafeRow(numbers []int) bool {
 }
 
 func absDiff(x, y int) int {
-	diff := x - y
-	if diff < 0 {
-		return diff * -1
+	if x > y {
+		return x - y
 	}
-
-	return diff
+	return y - x
 }

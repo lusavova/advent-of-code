@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"strconv"
@@ -8,22 +9,18 @@ import (
 )
 
 func main() {
-	data, err := os.ReadFile("2024/day02/input.txt")
+	file, err := os.Open("input.txt")
 	if err != nil {
-		fmt.Printf("Error: %v\n", err)
 		return
 	}
+	defer file.Close()
+
 	result := 0
-	lines := strings.Split(string(data), "\n")
-	for _, line := range lines {
-		tokens := strings.Split(line, " ")
-		var numbers []int
-		for _, token := range tokens {
-			num, _ := strconv.Atoi(token)
-			numbers = append(numbers, num)
 
-		}
-
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		inputLine := scanner.Text()
+		numbers := convertInputToNumbers(inputLine)
 		if isSafeRow(numbers) {
 			result++
 		}
@@ -35,15 +32,17 @@ func main() {
 func isSafeRow(numbers []int) bool {
 	isIncreasing := numbers[1]-numbers[0] > 0
 	for i := 1; i < len(numbers); i++ {
-		prev := numbers[i-1]
-		current := numbers[i]
+		prev, current := numbers[i-1], numbers[i]
+
 		if prev == current {
 			return false
 		}
+
 		isCurrentIncreasing := current-prev > 0
 		if isCurrentIncreasing != isIncreasing {
 			return false
 		}
+
 		if absDiff(current, prev) > 3 {
 			return false
 		}
@@ -53,10 +52,18 @@ func isSafeRow(numbers []int) bool {
 }
 
 func absDiff(x, y int) int {
-	diff := x - y
-	if diff < 0 {
-		return diff * -1
+	if x > y {
+		return x - y
 	}
+	return y - x
+}
 
-	return diff
+func convertInputToNumbers(inputLine string) []int {
+	tokens := strings.Fields(inputLine)
+	var numbers []int
+	for _, token := range tokens {
+		num, _ := strconv.Atoi(token)
+		numbers = append(numbers, num)
+	}
+	return numbers
 }
