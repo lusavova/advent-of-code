@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"strconv"
@@ -8,29 +9,32 @@ import (
 )
 
 func main() {
-	data, _ := os.ReadFile("input.txt")
-	lines := strings.Split(string(data), "\n")
+	file, err := os.Open("input.txt")
+	if err != nil {
+		return
+	}
+	defer file.Close()
 
-	leftArr := []int{}
-	occurences := map[int]int{}
-	for _, line := range lines {
-		tokens := strings.Split(line, "   ")
+	leftColumn := []int{}
+	occurrences := map[int]int{}
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		tokens := strings.Fields(line)
+
 		leftNum, _ := strconv.Atoi(tokens[0])
-		leftArr = append(leftArr, leftNum)
+		leftColumn = append(leftColumn, leftNum)
 
 		rightNum, _ := strconv.Atoi(tokens[1])
-		if _, ok := occurences[rightNum]; !ok {
-			occurences[rightNum] = 0
-		}
-		occurences[rightNum]++
+		occurrences[rightNum]++
 	}
 
 	result := 0
-	for _, num := range leftArr {
-		if _, ok := occurences[num]; !ok {
-			continue
+	for _, num := range leftColumn {
+		if _, exists := occurrences[num]; exists {
+			result += occurrences[num] * num
 		}
-		result += occurences[num] * num
 	}
 
 	fmt.Println(result)

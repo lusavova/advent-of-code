@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"sort"
@@ -9,31 +10,39 @@ import (
 )
 
 func main() {
-	data, _ := os.ReadFile("input.txt")
-	lines := strings.Split(string(data), "\n")
-	leftArr := []int{}
-	rightArr := []int{}
-	for _, line := range lines {
+	file, err := os.Open("input.txt")
+	if err != nil {
+		return
+	}
+	defer file.Close()
+
+	var leftColumn, rightColumn []int
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+
 		tokens := strings.Split(line, "   ")
 		leftNum, _ := strconv.Atoi(tokens[0])
 		rightNum, _ := strconv.Atoi(tokens[1])
 
-		leftArr = append(leftArr, leftNum)
-		rightArr = append(rightArr, rightNum)
+		leftColumn = append(leftColumn, leftNum)
+		rightColumn = append(rightColumn, rightNum)
 	}
 
-	sort.Ints(leftArr)
-	sort.Ints(rightArr)
+	sort.Ints(leftColumn)
+	sort.Ints(rightColumn)
 
 	result := 0
-	for i := 0; i < len(leftArr); i++ {
-		n := leftArr[i] - rightArr[i]
-		if n < 0 {
-			n *= -1
-		}
-
-		result += n
+	for index, leftNum := range leftColumn {
+		result += abs(leftNum - rightColumn[index])
 	}
 
 	fmt.Println(result)
+}
+
+func abs(num int) int {
+	if num < 0 {
+		return -num
+	}
+	return num
 }
