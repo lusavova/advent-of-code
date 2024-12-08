@@ -20,8 +20,8 @@ func main() {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
+		tokens := strings.Fields(line)
 
-		tokens := strings.Split(line, "   ")
 		leftNum, _ := strconv.Atoi(tokens[0])
 		rightNum, _ := strconv.Atoi(tokens[1])
 
