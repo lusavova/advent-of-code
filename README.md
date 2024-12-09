@@ -20,9 +20,6 @@
 ### Day 06
 - [problem](https://adventofcode.com/2024/day/6) - [part 01](https://github.com/lusavova/advent-of-code/blob/main/2024/day06/part01/main.go); [part 02](https://github.com/lusavova/advent-of-code/blob/main/2024/day06/part02/main.go)    
 
-**Part 01 Visualization:**     
-![Alt Text](https://github.com/lusavova/advent-of-code/blob/main/2024/visualizations/day-06-part-01-visualization.gif)
-
 ### Day 07
 - [problem](https://adventofcode.com/2024/day/7) - [part 01](https://github.com/lusavova/advent-of-code/blob/main/2024/day07/part01/main.go); [part 02](https://github.com/lusavova/advent-of-code/blob/main/2024/day07/part02/main.go)    
 
