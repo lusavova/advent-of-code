@@ -31,3 +31,9 @@
 
 ### Day 10
 - [problem](https://adventofcode.com/2024/day/10) - [part 01](https://github.com/lusavova/advent-of-code/blob/main/2024/day10/part01/main.go); [part 02](https://github.com/lusavova/advent-of-code/blob/main/2024/day10/part02/main.go)    
+
+### Day 11
+- [problem](https://adventofcode.com/2024/day/11) - [part 01](https://github.com/lusavova/advent-of-code/blob/main/2024/day11/part01/main.go); [part 02](https://github.com/lusavova/advent-of-code/blob/main/2024/day11/part02/main.go)
+
+### Day 12
+- [problem](https://adventofcode.com/2024/day/12) - [part 01](https://github.com/lusavova/advent-of-code/blob/main/2024/day12/part01/main.go); [part 02](https://github.com/lusavova/advent-of-code/blob/main/2024/day12/part02/main.go)    
