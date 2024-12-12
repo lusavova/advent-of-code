@@ -32,16 +32,14 @@ func main() {
 		for col := 0; col < len(matrix[0]); col++ {
 			if !visited[row][col] {
 				directions := map[string][]tuple{}
-				_, area := findPerimeter(matrix[row][col], row, col, matrix, visited, "", directions)
-				fmt.Println(matrix[row][col])
+				area := findAreaAndAddSides(matrix[row][col], row, col, matrix, visited, "", directions)
 
 				final := 0
 				for key, val := range directions {
-					c := sortSlice(key, val)
+					c := calculateSides(key, val)
 					final += c
 				}
-				fmt.Println(final, area, final*area)
-				fmt.Println()
+				fmt.Println(matrix[row][col], final, area, final*area)
 				result += final * area
 			}
 		}
@@ -50,7 +48,7 @@ func main() {
 	fmt.Println(result)
 }
 
-func sortSlice(direction string, tuples []tuple) int {
+func calculateSides(direction string, tuples []tuple) int {
 	dict := map[int][]int{}
 	if direction == "up" || direction == "down" {
 		for _, t := range tuples {
@@ -88,24 +86,23 @@ func sortSlice(direction string, tuples []tuple) int {
 	return cnt
 }
 
-func findPerimeter(plant string, row, col int, matrix [][]string, visited [][]bool, direction string, directions map[string][]tuple) (int, int) {
+func findAreaAndAddSides(plant string, row, col int, matrix [][]string, visited [][]bool, direction string, directions map[string][]tuple) int {
 	if row < 0 || col < 0 || row >= len(matrix) || col >= len(matrix[0]) || matrix[row][col] != plant {
 		if _, ok := directions[direction]; !ok {
 			directions[direction] = []tuple{}
 		}
 
 		directions[direction] = append(directions[direction], tuple{row, col})
-		return 1, 0
+		return 0
 	}
 
 	if visited[row][col] {
-		return 0, 0
+		return 0
 	}
 
 	visited[row][col] = true
-	perimeter1, area1 := findPerimeter(plant, row+1, col, matrix, visited, "down", directions)
-	perimeter2, area2 := findPerimeter(plant, row-1, col, matrix, visited, "up", directions)
-	perimeter3, area3 := findPerimeter(plant, row, col+1, matrix, visited, "right", directions)
-	perimeter4, area4 := findPerimeter(plant, row, col-1, matrix, visited, "left", directions)
-	return perimeter1 + perimeter2 + perimeter3 + perimeter4, 1 + area1 + area2 + area3 + area4
+	return 1 + findAreaAndAddSides(plant, row+1, col, matrix, visited, "down", directions) +
+		findAreaAndAddSides(plant, row-1, col, matrix, visited, "up", directions) +
+		findAreaAndAddSides(plant, row, col+1, matrix, visited, "right", directions) +
+		findAreaAndAddSides(plant, row, col-1, matrix, visited, "left", directions)
 }
