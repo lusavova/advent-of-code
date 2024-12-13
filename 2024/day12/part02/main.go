@@ -34,13 +34,13 @@ func main() {
 				directions := map[string][]tuple{}
 				area := findAreaAndAddSides(matrix[row][col], row, col, matrix, visited, "", directions)
 
-				final := 0
+				sides := 0
 				for key, val := range directions {
-					c := calculateSides(key, val)
-					final += c
+					countPerDirection := calculateSides(key, val)
+					sides += countPerDirection
 				}
-				fmt.Println(matrix[row][col], final, area, final*area)
-				result += final * area
+				fmt.Println(matrix[row][col], sides, area, sides*area)
+				result += sides * area
 			}
 		}
 	}
@@ -51,11 +51,11 @@ func main() {
 func calculateSides(direction string, tuples []tuple) int {
 	dict := map[int][]int{}
 	if direction == "up" || direction == "down" {
-		for _, t := range tuples {
-			if _, ok := dict[t.row]; !ok {
-				dict[t.row] = []int{}
+		for _, cell := range tuples {
+			if _, ok := dict[cell.row]; !ok {
+				dict[cell.row] = []int{}
 			}
-			dict[t.row] = append(dict[t.row], t.col)
+			dict[cell.row] = append(dict[cell.row], cell.col)
 		}
 	} else {
 		for _, t := range tuples {
