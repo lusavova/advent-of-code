@@ -42,7 +42,7 @@ func main() {
 		inputVelocity := strings.Split(parts[1][2:], ",")
 		velocityX, _ := strconv.Atoi(inputVelocity[0])
 		velocityY, _ := strconv.Atoi(inputVelocity[1])
-		robot := robot{
+		currentRobot := robot{
 			position: position{
 				row: positionY,
 				col: positionX,
@@ -52,32 +52,28 @@ func main() {
 				vertical:   velocityY,
 			},
 		}
-		robots = append(robots, robot)
+		robots = append(robots, currentRobot)
 	}
 
 	var matrix [rows][cols]int
-
-	for i := 0; i < 100; i++ {
-		for i := range robots {
-			newRow, newCol := getNextPosition(rows, cols, robots[i].position, robots[i].velocity)
-			if matrix[robots[i].position.row][robots[i].position.col] > 0 {
-				matrix[robots[i].position.row][robots[i].position.col] -= 1
-			}
-			robots[i].position = position{
-				row: newRow,
-				col: newCol,
-			}
-			matrix[robots[i].position.row][robots[i].position.col] += 1
+	for i := range robots {
+		newRow, newCol := getNextPosition(rows, cols, robots[i].position, robots[i].velocity)
+		robots[i].position = position{
+			row: newRow,
+			col: newCol,
 		}
+		matrix[robots[i].position.row][robots[i].position.col] += 1
 	}
 
 	printMatrix(matrix)
 
-	result1 := 0
-	result2 := 0
-	result3 := 0
-	result4 := 0
+	result1, result2, result3, result4 := getResult(matrix)
+	fmt.Println(result1, result2, result3, result4, result1*result2*result3*result4)
 
+}
+
+func getResult(matrix [103][101]int) (int, int, int, int) {
+	result1, result2, result3, result4 := 0, 0, 0, 0
 	firstRowBounds := rows / 2
 	firstColBounds := cols / 2
 
@@ -94,9 +90,7 @@ func main() {
 			}
 		}
 	}
-
-	fmt.Println(result1, result2, result3, result4, result1*result2*result3*result4)
-
+	return result1, result2, result3, result4
 }
 
 func printMatrix(matrix [rows][cols]int) {
@@ -113,19 +107,7 @@ func printMatrix(matrix [rows][cols]int) {
 }
 
 func getNextPosition(rows, cols int, position position, velocity velocity) (int, int) {
-	newRow := 0
-	if position.row+velocity.vertical < 0 {
-		newRow = ((position.row + velocity.vertical) + rows) % rows
-	} else {
-		newRow = (position.row + velocity.vertical) % rows
-	}
-
-	newCol := 0
-	if position.col+velocity.horizontal < 0 {
-		newCol = ((position.col + velocity.horizontal) + cols) % cols
-	} else {
-		newCol = (position.col + velocity.horizontal) % cols
-	}
-
+	newRow := ((position.row+velocity.vertical*100)%rows + rows) % rows
+	newCol := ((position.col+velocity.horizontal*100)%cols + cols) % cols
 	return newRow, newCol
 }
