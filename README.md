@@ -40,3 +40,6 @@
 
 ### Day 13
 - [problem](https://adventofcode.com/2024/day/13) - [part 01](https://github.com/lusavova/advent-of-code/blob/main/2024/day13/part01/main.go); [part 02](https://github.com/lusavova/advent-of-code/blob/main/2024/day13/part02/main.go)    
+
+### Day 14
+- [problem](https://adventofcode.com/2024/day/14) - [part 01](https://github.com/lusavova/advent-of-code/blob/main/2024/day14/part01/main.go); [part 02](https://github.com/lusavova/advent-of-code/blob/main/2024/day14/part02/main.go)    
