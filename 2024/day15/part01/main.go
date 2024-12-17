@@ -13,8 +13,8 @@ func main() {
 
 	var matrix [][]string
 	var moves []string
-	initialRow := -1
-	initialCol := -1
+	row := -1
+	col := -1
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -31,24 +31,48 @@ func main() {
 
 			for i, token := range tokens {
 				if token == "@" {
-					initialRow = len(matrix) - 1
-					initialCol = i
+					row = len(matrix) - 1
+					col = i
 				}
 			}
 		}
 
 	}
 
-	//printMatrix(matrix)
-	fmt.Println()
-	for _, move := range moves {
-		fmt.Println("MOVE", move)
-
-		initialRow, initialCol = moveBoxes(initialRow, initialCol, move, matrix)
-		//printMatrix(matrix)
+	directions := map[string][]int{
+		"^": {-1, 0},
+		">": {0, 1},
+		"v": {1, 0},
+		"<": {0, -1},
 	}
+	for _, move := range moves {
+		offsetRow := directions[move][0]
+		offsetCol := directions[move][1]
+		newRow := row + offsetRow
+		newCol := col + offsetCol
 
-	printMatrix(matrix)
+		if matrix[newRow][newCol] == "." {
+			matrix[row][col], matrix[newRow][newCol] = matrix[newRow][newCol], matrix[row][col]
+			row, col = newRow, newCol
+		} else if matrix[newRow][newCol] == "O" {
+			var boxesToMove [][]int
+			for matrix[newRow][newCol] == "O" {
+				boxesToMove = append(boxesToMove, []int{newRow, newCol})
+				newRow += offsetRow
+				newCol += offsetCol
+			}
+			if matrix[newRow][newCol] == "." {
+				for i := len(boxesToMove) - 1; i >= 0; i-- {
+					currentRow := boxesToMove[i][0]
+					currentCol := boxesToMove[i][1]
+					matrix[newRow][newCol], matrix[currentRow][currentCol] = matrix[currentRow][currentCol], matrix[newRow][newCol]
+					newRow, newCol = currentRow, currentCol
+				}
+				matrix[newRow][newCol], matrix[row][col] = matrix[row][col], matrix[newRow][newCol]
+				row, col = newRow, newCol
+			}
+		}
+	}
 
 	result := 0
 	for row := 0; row < len(matrix); row++ {
@@ -60,92 +84,6 @@ func main() {
 	}
 
 	fmt.Println(result)
-}
-
-func moveBoxes(row int, col int, move string, matrix [][]string) (int, int) {
-	if move == "^" {
-		switch matrix[row-1][col] {
-		case "#":
-			return row, col
-		case ".":
-			matrix[row][col] = "."
-			matrix[row-1][col] = "@"
-			return row - 1, col
-		case "O":
-			i := row - 1
-			for matrix[i][col] == "O" {
-				i--
-			}
-			if matrix[i][col] == "." {
-				matrix[i][col] = "O"
-				matrix[row-1][col] = "@"
-				matrix[row][col] = "."
-				return row - 1, col
-			}
-		}
-	} else if move == ">" { // DONE
-		switch matrix[row][col+1] {
-		case "#":
-			return row, col
-		case ".":
-			matrix[row][col] = "."
-			matrix[row][col+1] = "@"
-			return row, col + 1
-		case "O":
-			i := col + 1
-			for matrix[row][i] == "O" {
-				i++
-			}
-			if matrix[row][i] == "." {
-				matrix[row][i] = "O"
-				matrix[row][col+1] = "@"
-				matrix[row][col] = "."
-				return row, col + 1
-			}
-		}
-	} else if move == "v" {
-		switch matrix[row+1][col] {
-		case "#":
-			return row, col
-		case ".":
-			matrix[row][col] = "."
-			matrix[row+1][col] = "@"
-			return row + 1, col
-		case "O":
-			i := row + 1
-			for matrix[i][col] == "O" {
-				i++
-			}
-			if matrix[i][col] == "." {
-				matrix[i][col] = "O"
-				matrix[row+1][col] = "@"
-				matrix[row][col] = "."
-				return row + 1, col
-			}
-		}
-	} else if move == "<" {
-		switch matrix[row][col-1] {
-		case "#":
-			return row, col
-		case ".":
-			matrix[row][col] = "."
-			matrix[row][col-1] = "@"
-			return row, col - 1
-		case "O":
-			i := col - 1
-			for matrix[row][i] == "O" {
-				i--
-			}
-			if matrix[row][i] == "." {
-				matrix[row][i] = "O"
-				matrix[row][col-1] = "@"
-				matrix[row][col] = "."
-				return row, col - 1
-			}
-		}
-	}
-
-	return row, col
 }
 
 func printMatrix(matrix [][]string) {
