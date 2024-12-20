@@ -39,3 +39,5 @@
 [**Day 18**](https://adventofcode.com/2024/day/18) - [part 01](https://github.com/lusavova/advent-of-code/blob/main/2024/day18/part01/main.go); [part 02](https://github.com/lusavova/advent-of-code/blob/main/2024/day18/part02/main.go)      
 
 [**Day 19**](https://adventofcode.com/2024/day/19) - [part 01](https://github.com/lusavova/advent-of-code/blob/main/2024/day19/part01/main.go); [part 02](https://github.com/lusavova/advent-of-code/blob/main/2024/day19/part02/main.go)      
+
+[**Day 20**](https://adventofcode.com/2024/day/20) - [part 01](https://github.com/lusavova/advent-of-code/blob/main/2024/day20/part01/main.go); [part 02](https://github.com/lusavova/advent-of-code/blob/main/2024/day20/part02/main.go)      
