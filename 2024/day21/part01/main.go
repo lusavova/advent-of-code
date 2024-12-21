@@ -21,7 +21,7 @@ type helperResult struct {
 	key   string
 }
 
-var helperCache = map[string]helperResult{} // Cache for memoization
+var helperCache = map[string]helperResult{}
 
 func main() {
 	matrix := [][]string{
@@ -51,7 +51,11 @@ func main() {
 		"<": {1, 0},
 	}
 
-	codes := []string{"029A"} //"980A", "179A", "456A", "379A"
+	codes := []string{"140A",
+		"143A",
+		"349A",
+		"582A",
+		"964A"}
 
 	totalComplexity := 0
 	for _, code := range codes {
@@ -69,10 +73,9 @@ func main() {
 		codeValue, _ := strconv.Atoi(code[:len(code)-1])
 		totalComplexity += sequenceLength * codeValue
 
-		fmt.Printf("Code: %s, Length: %d, %s Complexity: %d\n", code, sequenceLength, finalPaths[0], sequenceLength*codeValue)
 	}
 
-	fmt.Printf("Total Complexity: %d\n", totalComplexity)
+	fmt.Println(totalComplexity)
 }
 
 func processCode(code string, keypad map[string]cell, matrix [][]string, startKey string) []string {
@@ -103,11 +106,10 @@ func processCodeForRobot(paths []string, keypad map[string]cell, matrix [][]stri
 	start := keypad[startKey]
 	result := []string{}
 
-	directions := [][]int{{1, 0}, {0, -1}, {0, 1}, {-1, 0}}
-	directionLetter := map[int]string{0: "v", 1: "<", 2: ">", 3: "^"}
+	directions := [][]int{{0, -1}, {1, 0}, {0, 1}, {-1, 0}}
+	directionLetter := map[int]string{0: "<", 1: "v", 2: ">", 3: "^"}
 
 	for _, path := range paths {
-		//fmt.Println("Process ", i)
 		current := start
 		currentPaths := []string{""}
 
@@ -130,25 +132,8 @@ func processCodeForRobot(paths []string, keypad map[string]cell, matrix [][]stri
 	return findMinLenPaths(result)
 }
 
-func findMinLenPaths(allPaths []string) []string {
-	minLen := math.MaxInt
-	for _, p := range allPaths {
-		if len(p) < minLen {
-			minLen = len(p)
-		}
-	}
-
-	var minPaths []string
-	for _, p := range allPaths {
-		if len(p) == minLen {
-			minPaths = append(minPaths, p)
-		}
-	}
-	return minPaths
-}
-
 func helper(start cell, target string, matrix [][]string, directions [][]int, directionLetter map[int]string) ([]string, string) {
-	cacheKey := fmt.Sprintf("%d,%d:%s", start.row, start.col, target)
+	cacheKey := fmt.Sprintf("%s:%s", matrix[start.row][start.col], target)
 	if result, exists := helperCache[cacheKey]; exists {
 		return result.paths, result.key
 	}
@@ -199,4 +184,21 @@ func helper(start cell, target string, matrix [][]string, directions [][]int, di
 
 	helperCache[cacheKey] = helperResult{shortestPaths, target}
 	return shortestPaths, target
+}
+
+func findMinLenPaths(allPaths []string) []string {
+	minLen := math.MaxInt
+	for _, p := range allPaths {
+		if len(p) < minLen {
+			minLen = len(p)
+		}
+	}
+
+	var minPaths []string
+	for _, p := range allPaths {
+		if len(p) == minLen {
+			minPaths = append(minPaths, p)
+		}
+	}
+	return minPaths
 }
